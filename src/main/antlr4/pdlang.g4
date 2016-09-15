@@ -1,3 +1,5 @@
+// lexer and some expressions partially taken from https://github.com/antlr/grammars-v4/blob/master/java/Java.g4
+
 grammar pdlang;
 
 compilationUnit:
@@ -22,7 +24,7 @@ moduleParams:
 	;
 	
 moduleName: 
-	(identifier '.')* identifier
+	fqName
 	; 
 	
 moduleDefinition:
@@ -39,7 +41,7 @@ moduleInitParams:
 	;
 	
 moduleInitParam:
-	identifier ':' type
+	type ':' identifier
 	;
 	
 moduleBody:
@@ -67,54 +69,180 @@ structDecl:
 	;
 	
 moduleFunc:
-	staticFunc? genericSignature? type identifier funcParams funcBody
+	staticFunc? identifier closure
 	;
 	
-funcParams:
-	'(' funcFormalParams? ')'
+closure:
+	 genericSignature? closureParams? closureMainBody closureRet?
+	 ;
+	 
+closureMainBody:
+	'{' closureDescription? closureCode '}'
+	;
+	 
+closureDescription:
+	closureDesc+
 	;
 	
-funcFormalParams:
-	(funcParam ',')* (funcParam | funcParamList)
+closureDesc:
+	variableDesc
+	variableAliasDesc
+	idAliasDesc
 	;
 	
-funcParam:
-	type ':' identifier
+variableDesc:
+	'lv' (identifier ',')* identifier ':' type ';'
 	;
 	
-funcParamList:
-	type ':' identifier '...'
+variableAliasDesc:
+	'varalias' identifier identifier ';'
 	;
 	
-funcBody:
-	'{' expression? '}'
+idAliasDesc:
+	'idalias' fqName identifier ';'
+	;
+	
+closureCode:
+	statements*
+	;
+	
+statements:
+	  implicitClosureInvocation
+	| returnStatement
+	| assignStatement
+	| discardStatement
+	| noopStatement
+	;
+	
+noopStatement:
+	';'
+	;
+	
+returnStatement:
+	'ret' expression? ';'
+	;
+	
+assignStatement:
+	identifier '=' expression ';'
+	;
+	
+discardStatement:
+	expression ';'
+	;
+	
+implicitClosureInvocation:
+	closureMainBody
+	;
+	 
+closureRet:
+	'rets' type
+	;
+	
+closureParams:
+	'(' closureFormalParams? ')'
+	;
+	
+closureFormalParams:
+	(closureParam ',')* (closureParam | closureParamList)
+	;
+	
+closureParam:
+	identifier ':' type
+	;
+	
+closureParamList:
+	identifier ':' type '...'
 	;
 	
 expression:
-	compoundExpression | constValue
+        primary
+    |   expression '.' identifier
+    |   expression '(' expressionList? ')'
+    |   'new' creator
+    |   '(' type ')' expression
+    |   opPlusMinus expression
+    |   opNeg expression
+    |   expression opMul expression
+    |   expression opPlus expression
+    |   expression opShift expression
+    |   expression opCompare expression
+    |   expression 'instanceof' type
+    |   expression opEql expression
+    |   expression opBAnd expression
+    |   expression opBXor expression
+    |   expression opBOr expression
+    |   expression opAnd expression
+    |   expression opOr expression
+    |   expression ternary expression ':' expression
+    ;
+    
+
+creator:
+	identifier // todo
+	;
+    
+ternary:
+	'?'
+	;
+    
+opBAnd:
+	'&'
 	;
 	
-compoundExpression:
-	'(' operation expression* ')'
+opAnd:
+	'&&'
 	;
 	
-operation:
-	numOperation
+opBOr:
+	'|'
+	;
+
+opOr:
+	'||'
 	;
 	
-numOperation:
-	add | sub | mul | div | eq | le | ge | ls | gr
+opBXor:
+	'^'
 	;
 	
-add: '+' ;
-sub: '-' ;
-mul: '*' ;
-div: '/' ;
-eq: '==' ;
-le: '<=' ;
-ge: '>=' ;
-ls: '<'  ;
-gr: '>'  ;
+opPlusMinus:
+	'+' | '-'
+	;
+	
+opNeg:
+	'~' | '!'
+	;
+	
+opMul:
+	'%'|'*'|'/'
+	;
+	
+opPlus:
+	'+'|'-'
+	;
+	
+opShift:
+	'<<' | '>>>' | '>>'
+	;
+	
+opCompare:
+	'<='|'>='|'>'|'<'
+	;
+	
+opEql:
+	'=='|'!='
+	;
+
+primary:
+       '(' expression ')'
+    |   closure
+    |   constValue
+    |   identifier
+;
+
+expressionList
+    :   expression (',' expression)*
+;
 	
 staticFunc:
 	'static'
@@ -141,7 +269,7 @@ genericSignature:
 	;
 	
 invokerType:
-	'[' type ':' '(' invokerArgTypes? ')' ']'
+	'{' type ':' '(' invokerArgTypes? ')' '}'
 	;
 	
 invokerArgTypes:
@@ -248,8 +376,6 @@ identifier:
 	;
 
 // LEXER
-
-// lexer partially taken from https://github.com/antlr/grammars-v4/blob/master/java/Java.g4
 
 INT		   : 'int';
 INTO	   : 'Int';
