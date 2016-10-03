@@ -290,7 +290,8 @@ type:
 	;
 	
 constType:
-	'int' | 'flt' | 'dbl' | 'lng' | 'Int' | 'Lng' | 'Flt' | 'Dbl' | 'chr' | 'Chr' | 'str' | 'bol' | 'Bol' | 'any' 
+	'int' | 'flt' | 'dbl' | 'lng' | 'Int' | 'Lng' | 'Flt' | 'Dbl' | 
+	'chr' | 'Chr' | 'str' | 'bol' | 'Bol' | 'any' | 'job' 
 	;
 	
 structType:
@@ -428,6 +429,8 @@ STR		   : 'str';
 CHR		   : 'chr';
 CHRO	   : 'Chr';
 ANY		   : 'any';
+JOB		   : 'job';
+MAKE	   : 'make';
 IMPORT	   : 'import';
 LET		   : 'let';
 STATIC	   : 'static';
