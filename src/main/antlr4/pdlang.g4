@@ -178,7 +178,19 @@ expression:
     
 
 creator:
-	identifier // todo
+	'make' structType structParams
+	;
+	
+structParams:
+	'{' structParameters '}'
+	;
+	
+structParameters:
+	structParameter*
+	;
+	
+structParameter:
+	identifier '=' expression ';'
 	;
     
 ternary:
