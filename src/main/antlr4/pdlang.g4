@@ -291,7 +291,7 @@ type:
 	
 constType:
 	'int' | 'flt' | 'dbl' | 'lng' | 'Int' | 'Lng' | 'Flt' | 'Dbl' | 
-	'chr' | 'Chr' | 'str' | 'bol' | 'Bol' | 'any' | 'job' 
+	'chr' | 'Chr' | 'str' | 'bol' | 'Bol' | 'any' | 'inv' 
 	;
 	
 structType:
