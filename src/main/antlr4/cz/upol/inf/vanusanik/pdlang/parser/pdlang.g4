@@ -74,7 +74,7 @@ moduleBody:
 	;
 	
 moduleDescriptionElement:
-	moduleConstant | moduleStruct | moduleFunc
+	moduleConstant | moduleStruct | moduleFunc | foreignType | foreignMethod
 	;
 	
 moduleConstant:
@@ -85,12 +85,20 @@ moduleStruct:
 	'structure' identifier genericSignature? structBody
 	;
 	
+foreignType:
+	'foreign' 'type' identifier ';'
+	;
+	
 structBody:
 	'{' (structDecl)? '}'
 	;
 	
 structDecl:
 	type ':' identifier ('=' constValue)? ';'
+	; 
+	
+foreignMethod:
+	'foreign' 'function' identifier genericSignature? closureParams? closureRet? ';'
 	;
 	
 moduleFunc:
@@ -199,8 +207,7 @@ expression:
     |   expression opAnd expression
     |   expression opOr expression
     |   expression ternary expression ':' expression
-    ;
-    
+    ;    
 
 creator:
 	'make' structType structParams
@@ -291,7 +298,7 @@ type:
 	
 constType:
 	'int' | 'flt' | 'dbl' | 'lng' | 'Int' | 'Lng' | 'Flt' | 'Dbl' | 
-	'chr' | 'Chr' | 'str' | 'bol' | 'Bol' | 'any' | 'inv' 
+	'chr' | 'Chr' | 'str' | 'bol' | 'Bol' | 'any' | 'inv'
 	;
 	
 structType:
@@ -434,6 +441,7 @@ MAKE	   : 'make';
 IMPORT	   : 'import';
 LET		   : 'let';
 STATIC	   : 'static';
+FOREIGN    : 'foreign';
 
 /*
  [The "BSD licence"]
