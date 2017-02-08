@@ -52,6 +52,12 @@
 						<goals>
 							<goal>antlr4</goal>
 						</goals>
+						<configuration>
+							<listener>true</listener>
+							<visitor>true</visitor>
+							<atn>true</atn>
+							<forceATN>true</forceATN>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
