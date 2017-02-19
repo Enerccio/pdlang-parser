@@ -82,7 +82,7 @@ moduleConstant:
 	;
 	
 moduleStruct:
-	'structure' identifier genericSignature? structBody
+	'structure' identifier structBody
 	;
 	
 foreignType:
@@ -98,7 +98,7 @@ structDecl:
 	; 
 	
 foreignMethod:
-	'foreign' 'function' identifier genericSignature? closureParams? closureRet? ';'
+	'foreign' 'function' identifier closureParams? closureRet? ';'
 	;
 	
 moduleFunc:
@@ -106,7 +106,7 @@ moduleFunc:
 	;
 	
 closure:
-	 genericSignature? closureParams? closureMainBody closureRet?
+	 closureParams? closureMainBody closureRet?
 	 ;
 	 
 closureMainBody:
@@ -176,15 +176,11 @@ closureParams:
 	;
 	
 closureFormalParams:
-	(closureParam ',')* (closureParam | closureParamList)
+	(closureParam ',')* closureParam
 	;
 	
 closureParam:
 	identifier ':' type
-	;
-	
-closureParamList:
-	identifier ':' type '...'
 	;
 	
 expression:
@@ -298,19 +294,15 @@ type:
 	
 constType:
 	'int' | 'flt' | 'dbl' | 'lng' | 'Int' | 'Lng' | 'Flt' | 'Dbl' | 
-	'chr' | 'Chr' | 'str' | 'bol' | 'Bol' | 'any' | 'inv'
+	'chr' | 'Chr' | 'str' | 'bol' | 'Bol' | 'any' 
 	;
 	
 structType:
-	fqName genericSignature?
+	fqName 
 	;
 	
 fqName:
 	(identifier '.')* identifier
-	;
-	
-genericSignature:
-	'<' (type ',')* type '>'
 	;
 	
 invokerType:
