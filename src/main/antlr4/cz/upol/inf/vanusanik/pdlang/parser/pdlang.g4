@@ -90,7 +90,7 @@ foreignType:
 	;
 	
 structBody:
-	'{' (structDecl)? '}'
+	'{' (structDecl)*? '}'
 	;
 	
 structDecl:
