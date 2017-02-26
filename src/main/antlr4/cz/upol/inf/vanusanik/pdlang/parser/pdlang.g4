@@ -106,7 +106,7 @@ moduleFunc:
 	;
 	
 closure:
-	 closureParams? closureMainBody closureRet?
+	 closureParams? closureMainBody ((closureRet ';') | ';'?)
 	 ;
 	 
 closureMainBody:
@@ -120,7 +120,6 @@ closureDescription:
 closureDesc:
 	variableDesc
 	variableAliasDesc
-	idAliasDesc
 	;
 	
 variableDesc:
@@ -129,10 +128,6 @@ variableDesc:
 	
 variableAliasDesc:
 	'varalias' identifier identifier ';'
-	;
-	
-idAliasDesc:
-	'idalias' fqName identifier ';'
 	;
 	
 closureCode:
@@ -180,7 +175,7 @@ closureFormalParams:
 	;
 	
 closureParam:
-	identifier ':' type
+	type ':' identifier
 	;
 	
 expression:
@@ -294,7 +289,7 @@ type:
 	
 constType:
 	'int' | 'flt' | 'dbl' | 'lng' | 'Int' | 'Lng' | 'Flt' | 'Dbl' | 
-	'chr' | 'Chr' | 'str' | 'bol' | 'Bol' | 'any' 
+	'chr' | 'Chr' | 'str' | 'bol' | 'Bol' | 'Byt' | 'byt' | 'any' 
 	;
 	
 structType:
